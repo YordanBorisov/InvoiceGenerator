@@ -1,0 +1,89 @@
+CREATE DATABASE  IF NOT EXISTS `invoice` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `invoice`;
+-- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
+--
+-- Host: localhost    Database: invoice
+-- ------------------------------------------------------
+-- Server version	5.5.22
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `surname` varchar(200) NOT NULL,
+  `family` varchar(200) NOT NULL,
+  `address` varchar(1000) NOT NULL,
+  `egn` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Jordan','Evgeniev','Borisov','Bulgaria, Sofia, Burgas str.','22'),(2,'Georgi','Petrov','Petrov','Bulgaria, Kaspichan, Lesnovo str.','22'),(3,'Mihail','Dimitrov','Simeonov','Bulgaria, Plovdiv, Oda str.','21'),(4,'Kaloian','Stoianov','Ivanov','Bulgaria, Pernik, Kol str.','26'),(5,'Atanas','Lesov','Panev','Bulgaria, Sofia, Madrid str.','32');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `invoice`
+--
+
+DROP TABLE IF EXISTS `invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `amount` decimal(10,2) DEFAULT '0.00',
+  PRIMARY KEY (`id`),
+  KEY `inv_id` (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `invoice_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=237 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoice`
+--
+
+LOCK TABLES `invoice` WRITE;
+/*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+INSERT INTO `invoice` VALUES (1,1,231.04),(2,1,997.32),(3,1,380.47),(4,1,326.07),(5,1,23.08),(6,1,347.50),(7,1,669.22),(8,1,212.77),(9,1,228.08),(10,1,944.94),(11,1,7.86),(12,1,792.03),(13,1,381.14),(14,1,810.90),(15,1,426.05),(16,1,523.04),(17,1,828.76),(18,1,250.96),(19,1,491.44),(20,1,300.57),(21,2,113.32),(22,2,552.79),(23,2,435.17),(24,2,896.68),(25,2,497.63),(26,2,734.13),(27,2,751.62),(28,2,49.48),(29,2,968.92),(30,2,129.67),(31,2,879.75),(32,2,384.91),(33,2,261.99),(34,2,126.57),(35,2,727.22),(36,2,956.15),(37,2,797.81),(38,2,284.76),(39,2,607.48),(40,2,690.08),(41,2,946.15),(42,2,411.15),(43,2,626.38),(44,2,441.42),(45,2,690.35),(46,2,896.49),(47,2,676.37),(48,2,672.43),(49,2,596.92),(50,2,768.63),(51,2,975.22),(52,2,999.97),(53,2,974.59),(54,2,468.18),(55,2,520.40),(56,2,981.14),(57,2,244.86),(58,2,310.20),(59,2,921.12),(60,2,545.40),(61,2,840.17),(62,2,959.95),(63,2,817.29),(64,2,422.97),(65,2,395.84),(66,2,21.35),(67,3,497.78),(68,3,768.28),(69,3,608.65),(70,3,13.36),(71,3,390.08),(72,3,931.87),(73,3,897.36),(74,3,592.64),(75,3,809.06),(76,3,995.53),(77,3,919.54),(78,3,869.91),(79,3,724.92),(80,3,252.64),(81,3,74.27),(82,3,63.39),(83,3,338.53),(84,3,289.34),(85,3,351.76),(86,3,533.79),(87,3,936.79),(88,3,702.19),(89,3,278.37),(90,3,453.92),(91,3,841.96),(92,3,773.91),(93,3,250.00),(94,3,979.98),(95,3,265.35),(96,3,621.36),(97,3,246.34),(98,3,812.08),(99,3,529.59),(100,3,428.35),(101,3,775.48),(102,3,458.34),(103,3,432.95),(104,3,380.95),(105,3,910.74),(106,3,350.07),(107,3,495.25),(108,3,834.00),(109,3,450.68),(110,3,194.46),(111,3,446.70),(112,3,54.89),(113,3,558.38),(114,3,597.09),(115,3,599.54),(116,3,614.38),(117,3,717.55),(118,3,38.07),(119,3,676.87),(120,3,124.06),(121,3,480.73),(122,3,743.71),(123,3,263.81),(124,3,556.17),(125,3,278.77),(126,3,859.88),(127,3,293.32),(128,3,823.97),(129,3,510.91),(130,3,603.77),(131,3,882.19),(132,3,649.39),(133,3,241.50),(134,3,747.44),(135,3,392.36),(136,3,999.57),(137,3,91.62),(138,3,869.54),(139,3,808.65),(140,3,535.17),(141,3,333.29),(142,3,301.03),(143,3,395.75),(144,3,580.47),(145,3,768.83),(146,3,585.91),(147,3,126.05),(148,3,99.25),(149,3,709.54),(150,3,580.14),(151,3,554.07),(152,3,39.88),(153,4,255.48),(154,4,19.45),(155,4,654.32),(156,4,199.67),(157,4,122.14),(158,4,501.53),(159,4,636.44),(160,4,450.52),(161,4,459.90),(162,4,348.08),(163,4,904.69),(164,4,766.77),(165,4,468.77),(166,4,739.44),(167,4,138.59),(168,4,0.86),(169,4,123.39),(170,4,847.10),(171,4,937.12),(172,4,763.84),(173,4,992.43),(174,4,428.94),(175,4,591.30),(176,4,84.76),(177,4,961.54),(178,5,497.47),(179,5,327.82),(180,5,746.80),(181,5,650.65),(182,5,223.03),(183,5,801.38),(184,5,328.12),(185,5,453.81),(186,5,192.02),(187,5,704.06),(188,5,10.95),(189,5,424.07),(190,5,504.40),(191,5,106.98),(192,5,165.51),(193,5,675.86),(194,5,965.34),(195,5,553.13),(196,5,563.37),(197,5,583.72),(198,5,802.47),(199,5,979.49),(200,5,830.24),(201,5,819.26),(202,5,923.32),(203,5,262.63),(204,5,408.98),(205,5,186.70),(206,5,716.77),(207,5,553.95),(208,5,871.10),(209,5,292.99),(210,5,797.88),(211,5,598.99),(212,5,888.77),(213,5,319.67),(214,5,897.07),(215,5,919.98),(216,5,559.05),(217,5,551.35),(218,5,302.85),(219,5,81.36),(220,5,58.29),(221,5,859.81),(222,5,881.37),(223,5,255.36),(224,5,797.13),(225,5,42.75),(226,5,716.69),(227,5,957.84),(228,5,344.81),(229,5,772.63),(230,5,842.36),(231,5,134.20),(232,5,396.93),(233,5,923.99),(234,5,367.91),(235,5,741.11),(236,5,971.35);
+/*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'invoice'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-02-12 23:53:51
