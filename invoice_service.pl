@@ -2,7 +2,9 @@
 use HTTP::Daemon;
 use HTTP::Status;
 use URI::QueryParam;
-require 'DBHelper.pl';
+use IO::Handle;
+require 'pdf_format.pl';
+require 'xls_format.pl';
  
 my $server = HTTP::Daemon->new(
          
@@ -20,15 +22,25 @@ while (my $client = $server->accept)
 				
 				my $uri   = URI->new($request->url);
 				
-				print $uri->query_param("doc");
+				my $doc =  $uri->query_param("doc");
 				my $userid = int($uri->query_param("userid"));
-				my @det = getUserDetails($userid);
-				my $response = "";
-				foreach my $row (@det)
+				my $status = "";
+				if ($doc eq "pdf")
 				{
-					$response .= join(" ",@{$row})."\n";
+					createPDF($userid);
+					$status = "PDF ready";
+					$client->send_response("Content-type: text/html\n\n$status");
 				}
-				$client->send_response("Content-type: text/html\n\n$response");
+				elsif ($doc eq "xls")
+				{
+					createXLS($userid);
+					$status = "Excel ready";
+					$client->send_response("Content-type: text/html\n\n$status");
+				}else
+				{
+					$status = "Invalid document type!";
+					$client->send_response("Content-type: text/html\n\n$status");
+				}
 			}
         }
         else {

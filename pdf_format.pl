@@ -1,6 +1,7 @@
 п»їuse PDF::Create;
 use strict;
 use open IO  => ":encoding(windows-1251)";
+require 'DBHelper.pl';
 
 sub createPDF
 {
@@ -8,8 +9,10 @@ sub createPDF
 	{
 		return;
 	}
+	my $userid = int($_[0]);
+	my @det = getUserDetails($userid);
 	my $company = 'My Company';
-	my $pdf = new PDF::Create('filename'     => 'invoice'.$_[0].'.pdf',
+	my $pdf = new PDF::Create('filename'     => 'invoice'.$userid.'.pdf',
 							  'Version'      => 1.2,
 							  'PageMode'     => 'UseOutlines',
 							  'Author'       => $company,
@@ -18,42 +21,57 @@ sub createPDF
 						 );
 	my $root = $pdf->new_page('MediaBox' => [ 0, 0, 612, 792 ]);
 
-	# Add a page which inherits its attributes from $root
 	my $page = $root->new_page;
 
-	# Prepare 2 fonts
 	my $win = $pdf->font('Subtype'  => 'Type1',
 						'Encoding' => 'WinAnsiEncoding',
 						'BaseFont' => 'Helvetica');
-	my $utf = $pdf->font('Subtype'  => 'Type1',
-						'Encoding' => 'WinAnsiEncoding',
-						'BaseFont' => 'Helvetica-Bold');
 
-	# Prepare a Table of Content
 	my $toc = $pdf->new_outline('Title' => 'Document',
 								'Destination' => $page);
+
 	$toc->new_outline('Title' => 'Page 1');
-	my $s2 = $toc->new_outline('Title' => 'Section 2',
-							   'Status' => 'closed');
 	
+	my $offset = 526;
+	my $name = $det[0][0].' '.$det[0][1].' '.$det[0][2];
+	my $address = $det[0][3];
+	my $pageNum = 2;
+	my $index = 1;
+	$page->string($win, 20, 90, $offset , "Name:$name");
+	$page->string($win, 20, 90, $offset - 20 , "Address:$address");
+	$offset -= 100;
+	foreach my $row (@det)
+	{	
 
-	$page->stringc($win, 40, 306, 426, "PDF::Create");
-	$page->stringc($utf, 20, 306, 396, "version $PDF::Create::VERSION");
+		if ($index eq scalar(@det)  )
+		{
+			$page->string($win, 7, 100, $offset ,"Total ". @{$row}[5]);
+			$page->line(100, $offset-1, 140, $offset-1);
+			last;
+		}
+		$index++;
+		
+		if ($offset <= 0)
+		{
+			$page = $root->new_page;
+			$toc = $pdf->new_outline('Title' => 'Document',
+			'Destination' => $page);
 
-	# Add another page
-	my $page2 = $root->new_page;
-	$page2->line(0, 0, 612, 792);
-	$page2->line(0, 792, 612, 0);
+			$toc->new_outline('Title' => 'Page '.$pageNum++);
+			$offset = 782;
+		}
+		
+		$page->string($win, 7, 100, $offset , @{$row}[5]);
+		$page->line(100, $offset-1, 140, $offset-1);
+		$offset -= 10;
+		
 
-	$toc->new_outline('Title' => 'Section 3');
-	$pdf->new_outline('Title' => 'Summary');
+		
+	}
+	$page->string($win, 5, 500, $offset - 10,
+				   "Created by $company");
 
-	# Add something to the first page
-	$page->stringc($win, 20, 306, 300,
-				   "Създанена от $company");
-
-	# Add the missing PDF objects and a the footer then close the file
+	
 	$pdf->close;
 };
-createPDF(2);
 1
